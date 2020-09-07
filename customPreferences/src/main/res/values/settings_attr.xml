@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomListPreference">
+        <attr name="list_item_layout" format="integer" />
+        <attr name="list_dialog_animation" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="CustomTimePreference">
+        <attr name="picker_dialog_theme" format="integer" />
+    </declare-styleable>
+</resources>

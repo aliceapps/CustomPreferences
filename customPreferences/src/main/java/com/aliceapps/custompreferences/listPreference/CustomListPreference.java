@@ -14,7 +14,6 @@ import com.aliceapps.custompreferences.R;
  * CustomListPreference works the same way as ListPreference, but shows custom dialog with custom layout
  * How to use it in preferences.xml file:
  * <com.aliceapps.custompreferences.listPreference.CustomListPreference
- * xmlns:aliceapps="http://schemas.android.com/apk/res/com.aliceapps.custompreferences"
  * android:title="Preference title" - Title visible on the preference screen
  * android:dialogTitle="Dialog title" - Title visible in the dialog
  * android:negativeButtonText="Negative button"
@@ -24,8 +23,8 @@ import com.aliceapps.custompreferences.R;
  * app:key="locale_override"
  * android:layout="@layout/preference_layout"
  * android:dialogLayout="@layout/settings_dialog_layout" - layout inflated in dialog
- * aliceapps:list_item_layout="@layout/settings_list_item_layout" - layout inflated in recycler view adapter
- * aliceapps:list_dialog_animation="@anim/customDialogAnimation" - dialog animation
+ * app:list_item_layout="@layout/settings_list_item_layout" - layout inflated in recycler view adapter
+ * app:list_dialog_animation="@anim/customDialogAnimation" - dialog animation
  * app:useSimpleSummaryProvider="true" />
  * <p>
  * Custom dialog layout must contain the following views:

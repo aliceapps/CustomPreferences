@@ -23,12 +23,11 @@ import java.util.Calendar;
  * How to use it in preferences.xml file:
  *
  * <com.aliceapps.custompreferences.listPreference.CustomTimePreference
- * xmlns:aliceapps="http://schemas.android.com/apk/res/com.aliceapps.custompreferences"
  * android:title="Preference title" - Title visible on the preference screen
  * app:defaultValue="800"
  * app:key="time"
  * android:layout="@layout/preference_layout"
- * aliceapps:picker_dialog_theme="@style/TimePickerTheme" - theme that will be used for time picker dialog
+ * app:picker_dialog_theme="@style/TimePickerTheme" - theme that will be used for time picker dialog
  * app:useSimpleSummaryProvider="true" />
  * <p>
  * Preference layout has the same structure as ListPreference layout, must contain:

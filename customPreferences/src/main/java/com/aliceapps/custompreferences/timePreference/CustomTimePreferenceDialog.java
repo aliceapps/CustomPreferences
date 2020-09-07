@@ -8,8 +8,19 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.preference.PreferenceDialogFragmentCompat;
 
+/**
+ * Dialog class for CustomTimePreference
+ * Will show TimePicker dialog
+ * @author alice.apps
+ * @version 07.09.2020
+ */
 public class CustomTimePreferenceDialog extends PreferenceDialogFragmentCompat {
 
+    /**
+     * Creates new instance of dialog. Method is called from CustomPreferenceManager.showCustomDialog(preference, fragment) method
+     * @param key - preference key
+     * @return Dialog instance
+     */
     @NonNull
     public static CustomTimePreferenceDialog newInstance(String key) {
         final CustomTimePreferenceDialog fragment = new CustomTimePreferenceDialog();
@@ -20,6 +31,10 @@ public class CustomTimePreferenceDialog extends PreferenceDialogFragmentCompat {
         return fragment;
     }
 
+    /**
+     * Fills all parameters required to show preference dialog and shows TimePicker dialog
+     * @param savedInstanceState - saved state parameters
+     */
     @Override
     public @NonNull
     Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -59,6 +74,10 @@ public class CustomTimePreferenceDialog extends PreferenceDialogFragmentCompat {
                     hours, minutes, true);
     }
 
+    /**
+     * Runs on dialog close. Does nothing because we don't want to trigger any logic here.
+     * @param positiveResult - closure result
+     */
     @Override
     public void onDialogClosed(boolean positiveResult) {
     }

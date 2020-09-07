@@ -9,7 +9,29 @@ import com.aliceapps.custompreferences.listPreference.CustomListPreferenceDialog
 import com.aliceapps.custompreferences.timePreference.CustomTimePreference;
 import com.aliceapps.custompreferences.timePreference.CustomTimePreferenceDialog;
 
+/**
+ * Static class to start custom Preference dialogs
+ * In your Preference fragment override onDisplayPreferenceDialog method and call showCustomDialog method in there
+ *
+ * @author alice.apps
+ * @version 07.09.2020
+ */
 public class CustomPreferenceManager {
+
+    /**
+     * Static method what shows custom Preference dialogs
+     * Example:
+     * public void onDisplayPreferenceDialog(Preference preference) {
+     * boolean result = CustomPreferenceManager.showCustomDialog(preference, this);
+     * <p>
+     * if (!result)
+     * super.onDisplayPreferenceDialog(preference);
+     * }
+     *
+     * @param preference - current preference that was clicked on
+     * @param fragment   - fragment where showCustomDialog was called (your Preference fragment)
+     * @return true if custom dialog was showed, false - if current preference is not custom. Call super.onDisplayPreferenceDialog(preference); method in onDisplayPreferenceDialog to start Preference dialog if showCustomDialog returns false.
+     */
 
     public static boolean showCustomDialog(Preference preference, Fragment fragment) {
         DialogFragment dialogFragment = null;
@@ -23,7 +45,6 @@ public class CustomPreferenceManager {
             dialogFragment.show(fragment.getParentFragmentManager(),
                     "PreferenceFragment.DIALOG");
             return true;
-        }
-        else return false;
+        } else return false;
     }
 }

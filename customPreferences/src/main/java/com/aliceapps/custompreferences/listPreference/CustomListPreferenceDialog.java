@@ -17,6 +17,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.aliceapps.custompreferences.R;
 
+/**
+ * Dialog class for CustomListPreference
+ * Will show the list of entries for selection.
+ * @author alice.apps
+ * @version 07.09.2020
+ */
 public class CustomListPreferenceDialog extends ListPreferenceDialogFragmentCompat {
     private static final String SAVE_STATE_INDEX = "AliceApps.CustomListPreferenceDialog.index";
     private static final String SAVE_STATE_ENTRIES = "AliceApps.CustomListPreferenceDialog.entries";
@@ -28,16 +34,20 @@ public class CustomListPreferenceDialog extends ListPreferenceDialogFragmentComp
     private static final String SAVE_STATE_TITLE = "AliceApps.CustomListPreferenceDialog.title";
     private static final String SAVE_STATE_NEGATIVE_TEXT = "AliceApps.CustomListPreferenceDialog.negativeText";
 
-    int mClickedDialogEntryIndex;
+    private int mClickedDialogEntryIndex;
     private CharSequence[] mEntries;
     private CharSequence[] mEntryValues;
     private CharSequence mDialogTitle;
     private CharSequence mNegativeButtonText;
     private int animationResource = 0;
-    private @LayoutRes
-    int mDialogLayoutRes = R.layout.settings_list_dialog;
+    private @LayoutRes int mDialogLayoutRes = R.layout.settings_list_dialog;
     private int mItemLayoutRes = R.layout.settings_list_item_layout;
 
+    /**
+     * Creates new instance of dialog. Method is called from CustomPreferenceManager.showCustomDialog(preference, fragment) method
+     * @param key - preference key
+     * @return Dialog instance
+     */
     @NonNull
     public static CustomListPreferenceDialog newInstance(String key) {
         final CustomListPreferenceDialog fragment = new CustomListPreferenceDialog();
@@ -47,6 +57,10 @@ public class CustomListPreferenceDialog extends ListPreferenceDialogFragmentComp
         return fragment;
     }
 
+    /**
+     * Fills all parameters required to show preference dialog
+     * @param savedInstanceState - saved state parameters
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +100,10 @@ public class CustomListPreferenceDialog extends ListPreferenceDialogFragmentComp
         }
     }
 
+    /**
+     * Saves parameters when dialog is re-created
+     * @param outState - saving state
+     */
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -99,6 +117,11 @@ public class CustomListPreferenceDialog extends ListPreferenceDialogFragmentComp
         outState.putInt(SAVE_STATE_ITEM_LAYOUT, mItemLayoutRes);
     }
 
+    /**
+     * Starts dialog
+     * @param savedInstanceState - save state of the dialog
+     * @return created Dialog
+     */
     @Override
     public @NonNull
     Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -114,12 +137,23 @@ public class CustomListPreferenceDialog extends ListPreferenceDialogFragmentComp
         return dialog;
     }
 
+    /**
+     * Inflates view tothe dialog.
+     * For custom view use android:dialogLayout="@layout/settings_dialog_layout" attibute of CustomListPreference
+     * @param context - current Context
+     * @return - inflated view
+     */
     @SuppressLint("InflateParams")
     @Override
     protected View onCreateDialogView(Context context) {
         return getLayoutInflater().inflate(mDialogLayoutRes, null);
     }
 
+    /**
+     * Prepares view. Loads title, recycler view and negative button
+     * @param view - inflated view
+     * @param dialog - created dialog
+     */
     protected void prepareView(@NonNull View view, @NonNull Dialog dialog) {
         if (animationResource != 0 && dialog.getWindow() != null)
             dialog.getWindow().setWindowAnimations(animationResource);
@@ -143,11 +177,10 @@ public class CustomListPreferenceDialog extends ListPreferenceDialogFragmentComp
 
     private void loadList(@NonNull View view, @NonNull Dialog dialog) {
         RecyclerView recyclerView = view.findViewById(R.id.settings_list_dialog_recycler_view);
-        EntrySelectionAdapter adapter = new EntrySelectionAdapter(requireContext(), mItemLayoutRes);
+        EntrySelectionAdapter adapter = new EntrySelectionAdapter(requireContext(), mItemLayoutRes, mEntries, mEntryValues, mClickedDialogEntryIndex, dialog, getPreference());
         recyclerView.setAdapter(adapter);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(requireContext());
         recyclerView.setLayoutManager(mLayoutManager);
-        adapter.setEntries(mEntries, mEntryValues, mClickedDialogEntryIndex, dialog, getPreference());
     }
 
     private void loadNegativeButton(@NonNull View view) {
@@ -163,6 +196,10 @@ public class CustomListPreferenceDialog extends ListPreferenceDialogFragmentComp
         });
     }
 
+    /**
+     * Runs on dialog close
+     * @param positiveResult - closure result
+     */
     @Override
     public void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);

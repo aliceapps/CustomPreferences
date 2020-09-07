@@ -17,6 +17,27 @@ import com.aliceapps.custompreferences.R;
 import java.text.DateFormat;
 import java.util.Calendar;
 
+/**
+ * CustomTimePreference shows custom Time Picker dialog
+ * CustomTimePreference saves the time in the number of minutes since midnight
+ * How to use it in preferences.xml file:
+ *
+ * <com.aliceapps.custompreferences.listPreference.CustomTimePreference
+ * xmlns:aliceapps="http://schemas.android.com/apk/res/com.aliceapps.custompreferences"
+ * android:title="Preference title" - Title visible on the preference screen
+ * app:defaultValue="800"
+ * app:key="time"
+ * android:layout="@layout/preference_layout"
+ * aliceapps:picker_dialog_theme="@style/TimePickerTheme" - theme that will be used for time picker dialog
+ * app:useSimpleSummaryProvider="true" />
+ * <p>
+ * Preference layout has the same structure as ListPreference layout, must contain:
+ * TextView @android:id/title - will be used to show title
+ * TextView @android:id/summary - will be used to show summary
+ *
+ * @author alice.apps
+ * @version 07.09.2020
+ */
 public class CustomTimePreference extends DialogPreference {
     private int mTime;
     private int timePickerStyle = 0;
@@ -39,10 +60,18 @@ public class CustomTimePreference extends DialogPreference {
         this(context,null);
     }
 
+    /**
+     *
+     * @return saved time in minutes
+     */
     public int getTime() {
         return mTime;
     }
 
+    /**
+     * Saves time selected in TimePicker
+     * @param time - selected time in minutes
+     */
     public void setTime(int time) {
         mTime = time;
         // Save to Shared Preferences
@@ -57,11 +86,22 @@ public class CustomTimePreference extends DialogPreference {
         return formatter.format(c.getTime());
     }
 
+    /**
+     * Returs default value
+     * @param a - array of attributes
+     * @param index - index of default value attribute
+     * @return - default value object
+     */
     @Override
     protected Object onGetDefaultValue(@NonNull TypedArray a, int index) {
         // Default value from attribute. Fallback value is set to 0.
         return a.getInt(index, 0);
     }
+
+    /**
+     * Saves initial value
+     * @param defaultValue - default value object
+     */
     @Override
     protected void onSetInitialValue(Object defaultValue) {
         // Read the value. Use the default value if it is not possible.
@@ -72,6 +112,10 @@ public class CustomTimePreference extends DialogPreference {
         setTime(getPersistedInt((Integer) defaultValue));
     }
 
+    /**
+     * Saves current state
+     * @return Parcelable saved state
+     */
     @Override
     protected Parcelable onSaveInstanceState() {
         final Parcelable superState = super.onSaveInstanceState();
@@ -87,6 +131,10 @@ public class CustomTimePreference extends DialogPreference {
         return myState;
     }
 
+    /**
+     * Restores saved state
+     * @param state - saved state
+     */
     @Override
     protected void onRestoreInstanceState(@NonNull Parcelable state) {
         if (!state.getClass().equals(SavedState.class)) {
@@ -149,7 +197,7 @@ public class CustomTimePreference extends DialogPreference {
 
     /**
      * A simple {@link androidx.preference.Preference.SummaryProvider} implementation for an
-     * {@link EditTextPreference}. If no value has been set, the summary displayed will be 'Not
+     * {@link CustomTimePreference}. If no value has been set, the summary displayed will be 'Not
      * set', otherwise the summary displayed will be the value set for this preference.
      */
     public static final class SimpleSummaryProvider implements Preference.SummaryProvider<CustomTimePreference> {
@@ -203,6 +251,10 @@ public class CustomTimePreference extends DialogPreference {
         return calendar;
     }
 
+    /**
+     * Returns TimePicker theme used for dialog
+     * @return TimePicker theme id
+     */
     public int getTimePickerStyle() {
         return timePickerStyle;
     }

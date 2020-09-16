@@ -45,7 +45,6 @@ ext {
     PUBLISH_GITHUB_CONNECTION = 'scm:git:github.com/aliceapps/CustomPreferences.git'
     PUBLISH_GITHUB_DEVELOPER_CONNECTION = 'scm:git:ssh://github.com/aliceapps/CustomPreferences.git'
     PUBLISH_GITHUB_CONNECTION_URL = 'https://github.com/aliceapps/CustomPreferences/tree/master'
-    PUBLISH_STAGING_PROFILE_ID = 'c39f084174529'
 }
 
 apply from: "C:/Users/alisa.tipisova/AndroidStudioProjects/scripts/publish-mavencentral.gradle"

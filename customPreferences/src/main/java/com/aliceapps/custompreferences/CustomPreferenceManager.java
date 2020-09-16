@@ -2,6 +2,7 @@ package com.aliceapps.custompreferences;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 
 import com.aliceapps.custompreferences.listPreference.CustomListPreference;
@@ -42,8 +43,9 @@ public class CustomPreferenceManager {
 
         if (dialogFragment != null) {
             dialogFragment.setTargetFragment(fragment, 0);
-            dialogFragment.show(fragment.getParentFragmentManager(),
-                    "PreferenceFragment.DIALOG");
+            FragmentManager manager = fragment.getParentFragmentManager();
+            if (manager != null)
+                dialogFragment.show(manager, "PreferenceFragment.DIALOG");
             return true;
         } else return false;
     }

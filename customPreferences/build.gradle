@@ -1,6 +1,4 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.aliceapps'
 
 android {
     compileSdkVersion 30
@@ -27,4 +25,24 @@ android {
 dependencies {
     implementation 'androidx.preference:preference:1.1.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.robolectric:robolectric:4.3.1'
+    testImplementation 'androidx.test:core:1.3.0'
+    testImplementation 'org.mockito:mockito-core:2.19.0'
 }
+
+ext {
+    PUBLISH_GROUP_ID = 'io.github.aliceapps'
+    PUBLISH_ARTIFACT_ID = 'custom-preferences'
+    PUBLISH_VERSION = android.defaultConfig.versionName
+    PUBLISH_DESCRIPTION = 'Custom SharedPreferences classes'
+    PUBLISH_GITHUB_URL = 'https://github.com/aliceapps/CustomPreferences'
+    PUBLISH_GITHUB_CONNECTION = 'scm:git:github.com/aliceapps/CustomPreferences.git'
+    PUBLISH_GITHUB_DEVELOPER_CONNECTION = 'scm:git:ssh://github.com/aliceapps/CustomPreferences.git'
+    PUBLISH_GITHUB_CONNECTION_URL = 'https://github.com/aliceapps/CustomPreferences/tree/master'
+    PUBLISH_STAGING_PROFILE_ID = 'c39f084174529'
+}
+
+apply from: "C:/Users/alisa.tipisova/AndroidStudioProjects/scripts/publish-mavencentral.gradle"
+

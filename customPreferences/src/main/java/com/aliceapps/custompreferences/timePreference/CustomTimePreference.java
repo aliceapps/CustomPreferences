@@ -9,7 +9,6 @@ import android.util.AttributeSet;
 
 import androidx.annotation.NonNull;
 import androidx.preference.DialogPreference;
-import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 
 import com.aliceapps.custompreferences.R;

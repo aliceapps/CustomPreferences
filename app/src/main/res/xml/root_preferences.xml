@@ -1,0 +1,23 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.aliceapps.custompreferences.listPreference.CustomListPreference
+        android:layout_width="match_parent"
+        android:dialogTitle="Test other"
+        android:negativeButtonText="Negative"
+        android:textAlignment="viewStart"
+        app:defaultValue="reply"
+        app:entries="@array/reply_entries"
+        app:entryValues="@array/reply_values"
+        app:key="locale_override"
+        android:title="Test title"
+        app:list_item_layout="@layout/settings_list_item_layout"
+        app:list_dialog_animation="0"
+        app:useSimpleSummaryProvider="true" />
+
+    <com.aliceapps.custompreferences.timePreference.CustomTimePreference
+        app:key="dayStart"
+        android:defaultValue="420"
+        app:title="Morning" />
+
+</PreferenceScreen>

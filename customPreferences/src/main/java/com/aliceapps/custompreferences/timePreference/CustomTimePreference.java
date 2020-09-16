@@ -12,6 +12,7 @@ import androidx.preference.DialogPreference;
 import androidx.preference.Preference;
 
 import com.aliceapps.custompreferences.R;
+import com.aliceapps.custompreferences.di.DaggerWrapper;
 
 import java.text.DateFormat;
 import java.util.Calendar;
@@ -20,7 +21,7 @@ import java.util.Calendar;
  * CustomTimePreference shows custom Time Picker dialog
  * CustomTimePreference saves the time in the number of minutes since midnight
  * How to use it in preferences.xml file:
- *
+ * <p>
  * <com.aliceapps.custompreferences.listPreference.CustomTimePreference
  * android:title="Preference title" - Title visible on the preference screen
  * app:defaultValue="800"
@@ -39,6 +40,8 @@ import java.util.Calendar;
 public class CustomTimePreference extends DialogPreference {
     private int mTime;
     private int timePickerStyle = 0;
+    private boolean timePickerFullFormat = true;
+    private int animationResource = 0;
 
     public CustomTimePreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
@@ -55,11 +58,10 @@ public class CustomTimePreference extends DialogPreference {
     }
 
     public CustomTimePreference(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     /**
-     *
      * @return saved time in minutes
      */
     public int getTime() {
@@ -68,6 +70,7 @@ public class CustomTimePreference extends DialogPreference {
 
     /**
      * Saves time selected in TimePicker
+     *
      * @param time - selected time in minutes
      */
     public void setTime(int time) {
@@ -86,7 +89,8 @@ public class CustomTimePreference extends DialogPreference {
 
     /**
      * Returs default value
-     * @param a - array of attributes
+     *
+     * @param a     - array of attributes
      * @param index - index of default value attribute
      * @return - default value object
      */
@@ -98,6 +102,7 @@ public class CustomTimePreference extends DialogPreference {
 
     /**
      * Saves initial value
+     *
      * @param defaultValue - default value object
      */
     @Override
@@ -112,6 +117,7 @@ public class CustomTimePreference extends DialogPreference {
 
     /**
      * Saves current state
+     *
      * @return Parcelable saved state
      */
     @Override
@@ -131,6 +137,7 @@ public class CustomTimePreference extends DialogPreference {
 
     /**
      * Restores saved state
+     *
      * @param state - saved state
      */
     @Override
@@ -147,6 +154,10 @@ public class CustomTimePreference extends DialogPreference {
         mTime = myState.mTime;
         timePickerStyle = myState.timePickerStyle;
         notifyChanged();
+    }
+
+    public boolean getTimeFormat() {
+        return timePickerFullFormat;
     }
 
     /**
@@ -202,7 +213,8 @@ public class CustomTimePreference extends DialogPreference {
 
         private static CustomTimePreference.SimpleSummaryProvider sSimpleSummaryProvider;
 
-        private SimpleSummaryProvider() {}
+        private SimpleSummaryProvider() {
+        }
 
         /**
          * Retrieve a singleton instance of this simple
@@ -229,9 +241,11 @@ public class CustomTimePreference extends DialogPreference {
         }
     }
 
-    private void loadCustomAttributes(@NonNull  AttributeSet attrs) {
-        TypedArray a = getContext().obtainStyledAttributes(attrs,R.styleable.CustomTimePreference);
-        timePickerStyle = a.getResourceId(R.styleable.CustomTimePreference_picker_dialog_theme,0);
+    private void loadCustomAttributes(@NonNull final AttributeSet attrs) {
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CustomTimePreference);
+        timePickerStyle = a.getResourceId(R.styleable.CustomTimePreference_picker_dialog_theme, 0);
+        timePickerFullFormat = a.getBoolean(R.styleable.CustomTimePreference_picker_dialog_24_format, true);
+        animationResource = a.getResourceId(R.styleable.CustomTimePreference_picker_dialog_animation, 0);
         a.recycle();
     }
 
@@ -243,7 +257,7 @@ public class CustomTimePreference extends DialogPreference {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, hours);
         calendar.set(Calendar.MINUTE, minutes);
-        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 
         return calendar;
@@ -251,9 +265,14 @@ public class CustomTimePreference extends DialogPreference {
 
     /**
      * Returns TimePicker theme used for dialog
+     *
      * @return TimePicker theme id
      */
     public int getTimePickerStyle() {
         return timePickerStyle;
+    }
+
+    public int getAnimation() {
+        return animationResource;
     }
 }

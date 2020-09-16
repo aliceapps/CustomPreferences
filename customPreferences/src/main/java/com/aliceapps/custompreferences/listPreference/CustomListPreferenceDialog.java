@@ -16,6 +16,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.aliceapps.custompreferences.R;
+import com.aliceapps.custompreferences.di.DaggerWrapper;
+import com.aliceapps.rxjavautils.AutoDisposable;
+import com.aliceapps.rxjavautils.BaseSchedulerProvider;
+
+import javax.inject.Inject;
+
+import io.reactivex.Completable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 
 /**
  * Dialog class for CustomListPreference
@@ -42,6 +51,9 @@ public class CustomListPreferenceDialog extends ListPreferenceDialogFragmentComp
     private int animationResource = 0;
     private @LayoutRes int mDialogLayoutRes = R.layout.settings_list_dialog;
     private int mItemLayoutRes = R.layout.settings_list_item_layout;
+    private AutoDisposable autoDisposable;
+    @Inject
+    BaseSchedulerProvider baseSchedulerProvider;
 
     /**
      * Creates new instance of dialog. Method is called from CustomPreferenceManager.showCustomDialog(preference, fragment) method
@@ -62,41 +74,54 @@ public class CustomListPreferenceDialog extends ListPreferenceDialogFragmentComp
      * @param savedInstanceState - saved state parameters
      */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (savedInstanceState == null) {
-            CustomListPreference mPreference = (CustomListPreference) getPreference();
+        autoDisposable = new AutoDisposable(this.getLifecycle());
+        DaggerWrapper.getComponent().inject(this);
 
-            if (mPreference.getEntries() == null || mPreference.getEntryValues() == null) {
-                throw new IllegalStateException(
-                        "ListPreference requires an entries array and an entryValues array.");
+        Disposable d = Completable.fromAction(new Action() {
+            @Override
+            public void run() {
+                if (savedInstanceState == null) {
+                    CustomListPreference mPreference = (CustomListPreference) getPreference();
+
+                    if (mPreference.getEntries() == null || mPreference.getEntryValues() == null) {
+                        throw new IllegalStateException(
+                                "ListPreference requires an entries array and an entryValues array.");
+                    }
+
+                    mClickedDialogEntryIndex = mPreference.findIndexOfValue(mPreference.getValue());
+                    mEntries = mPreference.getEntries();
+                    mEntryValues = mPreference.getEntryValues();
+                    if (mPreference.getDialogTitle() != null)
+                        mDialogTitle = mPreference.getDialogTitle();
+                    else if (mPreference.getTitle() != null)
+                        mDialogTitle = mPreference.getTitle();
+
+                    if (mPreference.getNegativeButtonText() != null)
+                        mNegativeButtonText = mPreference.getNegativeButtonText();
+                    if (mPreference.getDialogLayoutResource() != 0)
+                        mDialogLayoutRes = mPreference.getDialogLayoutResource();
+                    animationResource = mPreference.getAnimation();
+                    if (mPreference.getItemLayoutId() != 0)
+                        mItemLayoutRes = mPreference.getItemLayoutId();
+
+                } else {
+                    mClickedDialogEntryIndex = savedInstanceState.getInt(SAVE_STATE_INDEX, 0);
+                    mEntries = savedInstanceState.getCharSequenceArray(SAVE_STATE_ENTRIES);
+                    mEntryValues = savedInstanceState.getCharSequenceArray(SAVE_STATE_ENTRY_VALUES);
+                    mDialogTitle = savedInstanceState.getCharSequence(SAVE_STATE_TITLE);
+                    mNegativeButtonText = savedInstanceState.getCharSequence(SAVE_STATE_NEGATIVE_TEXT);
+                    mDialogLayoutRes = savedInstanceState.getInt(SAVE_STATE_LAYOUT, R.layout.settings_list_dialog);
+                    animationResource = savedInstanceState.getInt(SAVE_STATE_ANIMATION, 0);
+                    mItemLayoutRes = savedInstanceState.getInt(SAVE_STATE_ITEM_LAYOUT, R.layout.settings_list_item_layout);
+                }
             }
-
-            mClickedDialogEntryIndex = mPreference.findIndexOfValue(mPreference.getValue());
-            mEntries = mPreference.getEntries();
-            mEntryValues = mPreference.getEntryValues();
-            if (mPreference.getDialogTitle() != null)
-                mDialogTitle = mPreference.getDialogTitle();
-            else if (mPreference.getTitle() != null)
-                mDialogTitle = mPreference.getTitle();
-
-            if (mPreference.getNegativeButtonText() != null)
-                mNegativeButtonText = mPreference.getNegativeButtonText();
-            if (mPreference.getDialogLayoutResource() != 0)
-                mDialogLayoutRes = mPreference.getDialogLayoutResource();
-            animationResource = mPreference.getAnimation();
-            if (mPreference.getItemLayoutId() != 0)
-                mItemLayoutRes = mPreference.getItemLayoutId();
-
-        } else {
-            mClickedDialogEntryIndex = savedInstanceState.getInt(SAVE_STATE_INDEX, 0);
-            mEntries = savedInstanceState.getCharSequenceArray(SAVE_STATE_ENTRIES);
-            mEntryValues = savedInstanceState.getCharSequenceArray(SAVE_STATE_ENTRY_VALUES);
-            mDialogTitle = savedInstanceState.getCharSequence(SAVE_STATE_TITLE);
-            mNegativeButtonText = savedInstanceState.getCharSequence(SAVE_STATE_NEGATIVE_TEXT);
-            mDialogLayoutRes = savedInstanceState.getInt(SAVE_STATE_LAYOUT, R.layout.settings_list_dialog);
-            animationResource = savedInstanceState.getInt(SAVE_STATE_ANIMATION, 0);
-            mItemLayoutRes = savedInstanceState.getInt(SAVE_STATE_ITEM_LAYOUT, R.layout.settings_list_item_layout);
+        }).subscribeOn(baseSchedulerProvider.io()).subscribe();
+        try {
+            autoDisposable.add(d);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
         }
     }
 
@@ -105,16 +130,26 @@ public class CustomListPreferenceDialog extends ListPreferenceDialogFragmentComp
      * @param outState - saving state
      */
     @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
+    public void onSaveInstanceState(@NonNull final Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(SAVE_STATE_INDEX, mClickedDialogEntryIndex);
-        outState.putCharSequenceArray(SAVE_STATE_ENTRIES, mEntries);
-        outState.putCharSequenceArray(SAVE_STATE_ENTRY_VALUES, mEntryValues);
-        outState.putCharSequence(SAVE_STATE_TITLE, mDialogTitle);
-        outState.putCharSequence(SAVE_STATE_NEGATIVE_TEXT, mNegativeButtonText);
-        outState.putInt(SAVE_STATE_LAYOUT, mDialogLayoutRes);
-        outState.putInt(SAVE_STATE_ANIMATION, animationResource);
-        outState.putInt(SAVE_STATE_ITEM_LAYOUT, mItemLayoutRes);
+        Disposable d = Completable.fromAction(new Action() {
+            @Override
+            public void run() {
+                outState.putInt(SAVE_STATE_INDEX, mClickedDialogEntryIndex);
+                outState.putCharSequenceArray(SAVE_STATE_ENTRIES, mEntries);
+                outState.putCharSequenceArray(SAVE_STATE_ENTRY_VALUES, mEntryValues);
+                outState.putCharSequence(SAVE_STATE_TITLE, mDialogTitle);
+                outState.putCharSequence(SAVE_STATE_NEGATIVE_TEXT, mNegativeButtonText);
+                outState.putInt(SAVE_STATE_LAYOUT, mDialogLayoutRes);
+                outState.putInt(SAVE_STATE_ANIMATION, animationResource);
+                outState.putInt(SAVE_STATE_ITEM_LAYOUT, mItemLayoutRes);
+            }
+        }).subscribeOn(baseSchedulerProvider.io()).subscribe();
+        try {
+            autoDisposable.add(d);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
     }
 
     /**

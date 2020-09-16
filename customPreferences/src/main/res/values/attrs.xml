@@ -7,5 +7,7 @@
 
     <declare-styleable name="CustomTimePreference">
         <attr name="picker_dialog_theme" format="integer" />
+        <attr name="picker_dialog_animation" format="integer" />
+        <attr name="picker_dialog_24_format" format="boolean" />
     </declare-styleable>
 </resources>

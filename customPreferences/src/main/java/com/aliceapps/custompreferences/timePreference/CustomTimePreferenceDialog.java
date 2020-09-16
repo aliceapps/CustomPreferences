@@ -15,6 +15,7 @@ import androidx.preference.PreferenceDialogFragmentCompat;
  * @version 07.09.2020
  */
 public class CustomTimePreferenceDialog extends PreferenceDialogFragmentCompat {
+    private int animationResource = 0;
 
     /**
      * Creates new instance of dialog. Method is called from CustomPreferenceManager.showCustomDialog(preference, fragment) method
@@ -27,7 +28,6 @@ public class CustomTimePreferenceDialog extends PreferenceDialogFragmentCompat {
         final Bundle b = new Bundle(1);
         b.putString(ARG_KEY, key);
         fragment.setArguments(b);
-
         return fragment;
     }
 
@@ -42,6 +42,9 @@ public class CustomTimePreferenceDialog extends PreferenceDialogFragmentCompat {
         CustomTimePreference preference = (CustomTimePreference) getPreference();
         int timePickerStyle = preference.getTimePickerStyle();
         int minutesAfterMidnight = preference.getTime();
+        boolean timePickerFullFormat = preference.getTimeFormat();
+        animationResource = preference.getAnimation();
+        Dialog dialog = null;
 
         int hours = 0;
         int minutes = 0;
@@ -54,24 +57,28 @@ public class CustomTimePreferenceDialog extends PreferenceDialogFragmentCompat {
         TimePickerDialog.OnTimeSetListener timePicker = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(final TimePicker view, final int hourOfDay, final int minute) {
-                int minutesAfterMidnight = (hourOfDay * 60) + minute;
-                // Get the related Preference and save the value
-                CustomTimePreference preference = (CustomTimePreference) getPreference();
-                    // This allows the client to ignore the user value.
-                    if (preference.callChangeListener(
-                            minutesAfterMidnight)) {
-                        // Save the value
-                        preference.setTime(minutesAfterMidnight);
-                    }
-                }
+                        int minutesAfterMidnight = (hourOfDay * 60) + minute;
+                        // Get the related Preference and save the value
+                        CustomTimePreference preference = (CustomTimePreference) getPreference();
+                        // This allows the client to ignore the user value.
+                        if (preference.callChangeListener(minutesAfterMidnight)) {
+                            // Save the value
+                            preference.setTime(minutesAfterMidnight);
+                        }
+            }
         };
 
         if (timePickerStyle != 0)
-            return new TimePickerDialog(requireContext(), timePickerStyle, timePicker,
-                hours, minutes, true);
+            dialog = new TimePickerDialog(requireContext(), timePickerStyle, timePicker,
+                hours, minutes, timePickerFullFormat);
         else
-            return new TimePickerDialog(requireContext(), timePicker,
-                    hours, minutes, true);
+            dialog = new TimePickerDialog(requireContext(), timePicker,
+                    hours, minutes, timePickerFullFormat);
+
+        if (animationResource != 0 && dialog.getWindow() != null)
+            dialog.getWindow().setWindowAnimations(animationResource);
+
+        return dialog;
     }
 
     /**

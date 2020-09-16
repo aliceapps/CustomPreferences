@@ -12,12 +12,14 @@
         app:key="locale_override"
         android:title="Test title"
         app:list_item_layout="@layout/settings_list_item_layout"
-        app:list_dialog_animation="0"
+        app:list_dialog_animation="@style/DialogAnimation"
         app:useSimpleSummaryProvider="true" />
 
     <com.aliceapps.custompreferences.timePreference.CustomTimePreference
         app:key="dayStart"
         android:defaultValue="420"
+        app:picker_dialog_24_format="false"
+        app:picker_dialog_animation="@style/DialogAnimation"
         app:title="Morning" />
 
 </PreferenceScreen>

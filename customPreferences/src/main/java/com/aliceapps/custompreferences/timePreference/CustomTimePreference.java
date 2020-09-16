@@ -22,13 +22,14 @@ import java.util.Calendar;
  * CustomTimePreference saves the time in the number of minutes since midnight
  * How to use it in preferences.xml file:
  * <p>
- * <com.aliceapps.custompreferences.listPreference.CustomTimePreference
+ * com.aliceapps.custompreferences.listPreference.CustomTimePreference
  * android:title="Preference title" - Title visible on the preference screen
  * app:defaultValue="800"
  * app:key="time"
  * android:layout="@layout/preference_layout"
  * app:picker_dialog_theme="@style/TimePickerTheme" - theme that will be used for time picker dialog
- * app:useSimpleSummaryProvider="true" />
+ * app:useSimpleSummaryProvider="true"
+ * app:picker_dialog_animation="@style/customDialogAnimation" - dialog animation
  * <p>
  * Preference layout has the same structure as ListPreference layout, must contain:
  * TextView @android:id/title - will be used to show title

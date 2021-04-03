@@ -1,25 +1,22 @@
 package com.aliceapps.custompreferences;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
-import androidx.test.core.app.ApplicationProvider;
 
 import com.aliceapps.custompreferences.listPreference.CustomListPreference;
 import com.aliceapps.custompreferences.timePreference.CustomTimePreference;
-import com.aliceapps.custompreferences.timePreference.CustomTimePreferenceDialog;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.annotation.LooperMode;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 

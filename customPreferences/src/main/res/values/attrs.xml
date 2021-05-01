@@ -10,4 +10,10 @@
         <attr name="picker_dialog_animation" format="integer" />
         <attr name="picker_dialog_24_format" format="boolean" />
     </declare-styleable>
+
+    <declare-styleable name="CustomSeekbar">
+        <attr name="android:min"/>
+        <attr name="android:max"/>
+        <attr name="seekbar_type_text" format="integer"/>
+    </declare-styleable>
 </resources>

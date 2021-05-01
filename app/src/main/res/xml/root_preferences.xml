@@ -22,4 +22,19 @@
         app:picker_dialog_animation="@style/DialogAnimation"
         app:title="Morning" />
 
+    <com.aliceapps.custompreferences.seekbarPreference.CustomSeekbarPreference
+        android:layout_width="match_parent"
+        android:defaultValue="5"
+        android:textAlignment="viewStart"
+        android:layout="@layout/settings_seekbar_layout"
+        android:max="10"
+        android:min="1"
+        app:key="period_days_red"
+        app:seekbar_type_text="@string/months"
+        app:title="@string/settings_seekbar"
+        app:seekBarIncrement="1"
+        app:showSeekBarValue="true"
+        app:useSimpleSummaryProvider="true"
+        />
+
 </PreferenceScreen>

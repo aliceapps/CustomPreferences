@@ -12,7 +12,6 @@ import androidx.preference.DialogPreference;
 import androidx.preference.Preference;
 
 import com.aliceapps.custompreferences.R;
-import com.aliceapps.custompreferences.di.DaggerWrapper;
 
 import java.text.DateFormat;
 import java.util.Calendar;

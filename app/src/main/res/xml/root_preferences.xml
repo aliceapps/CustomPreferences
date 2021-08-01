@@ -4,7 +4,7 @@
     <com.aliceapps.custompreferences.listPreference.CustomListPreference
         android:layout_width="match_parent"
         android:dialogTitle="Test other"
-        android:negativeButtonText="Negative"
+        android:negativeButtonText="Cancel"
         android:textAlignment="viewStart"
         app:defaultValue="reply"
         app:entries="@array/reply_entries"
